@@ -1,0 +1,16 @@
+{
+  "name": "دليل أرقامي",
+  "short_name": "أرقامي",
+  "description": "دفتر أرقامك الشخصي — يعمل داخل جهازك دون إنترنت",
+  "lang": "ar",
+  "dir": "rtl",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f4f8fc",
+  "theme_color": "#2477d4",
+  "icons": [
+    { "src": "assets/icon.svg", "sizes": "any", "type": "image/svg+xml" },
+    { "src": "assets/apple-touch-icon.png", "sizes": "1254x1254", "type": "image/png", "purpose": "any maskable" }
+  ]
+}

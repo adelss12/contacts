@@ -2,61 +2,89 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>دليل أرقامي</title>
-    <!-- إعدادات أيقونة الآيفون -->
+    <meta name="description" content="دفتر أرقامك الشخصي — يعمل داخل جهازك دون إنترنت">
+    <meta name="theme-color" content="#f4f8fc" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#0d1724" media="(prefers-color-scheme: dark)">
+
+    <!-- تطبيق ويب قابل للتثبيت ويعمل دون إنترنت -->
+    <link rel="manifest" href="manifest.webmanifest">
+    <link rel="icon" href="assets/icon.svg" type="image/svg+xml">
     <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <meta name="apple-mobile-web-app-title" content="أرقامي">
+
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 <header class="app-header">
-    <div class="logo">د</div>
-
-    <div>
+    <div class="logo" aria-hidden="true">د</div>
+    <div class="header-text">
         <h1>دليل أرقامي</h1>
-        <p>دفتر أرقامك الشخصي</p>
-        <p id="contactsCount">عدد الأسماء: 0</p>
+        <p>دفتر أرقامك الشخصي — محفوظ في جهازك فقط</p>
     </div>
+    <span id="contactsCount" class="count-badge" title="عدد الأسماء">0</span>
 </header>
+
 <main class="app-card">
     <div class="sticky-search">
-    <input
-            type="search"
-            id="searchInput"
-            placeholder="ابحث بالاسم أو رقم الهاتف"
-        >
+        <div class="search-box">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+            <input
+                type="search"
+                id="searchInput"
+                placeholder="ابحث بالاسم أو رقم الهاتف"
+                autocomplete="off"
+                enterkeyhint="search"
+                aria-label="بحث"
+            >
+        </div>
+        <p id="searchStatus" class="search-status" aria-live="polite"></p>
     </div>
 
     <div class="toolbar">
-        
-
-        <button id="importButton">استيراد VCF</button>
-
-        <input
-            type="file"
-            id="vcfInput"
-            accept=".vcf"
-            hidden
-        >
-
-        <button id="exportButton">تصدير نسخة</button>
-        <button id="csvExportButton">تصدير Excel</button>
-
-        <button id="deleteAllButton" class="danger-button">
-            حذف الجميع
-        </button>
+        <button type="button" id="addButton" class="btn primary">+ إضافة اسم</button>
+        <button type="button" id="importButton" class="btn">استيراد VCF</button>
+        <input type="file" id="vcfInput" accept=".vcf,text/vcard,text/x-vcard" multiple hidden>
+        <button type="button" id="exportButton" class="btn">نسخة احتياطية</button>
+        <button type="button" id="csvExportButton" class="btn">تصدير Excel</button>
+        <button type="button" id="deleteAllButton" class="btn danger">حذف الجميع</button>
     </div>
 
-    <section id="contactsList" class="contacts-list">
-        <div class="empty-state">
-            <h2>دليلك جاهز</h2>
-            <p>استورد ملف جهات الاتصال VCF للبدء.</p>
-        </div>
-    </section>
+    <section id="contactsList" class="contacts-list"></section>
 </main>
-    <script src="app.js"></script>
-    
+
+<!-- نافذة إضافة/تعديل اسم -->
+<dialog id="contactDialog" aria-labelledby="dialogTitle">
+    <form id="contactForm">
+        <h2 id="dialogTitle">إضافة اسم</h2>
+
+        <label class="field">
+            <span>الاسم</span>
+            <input id="nameField" required maxlength="120" autocomplete="off">
+        </label>
+
+        <div class="field">
+            <span>أرقام الهاتف</span>
+            <div id="phonesFields" class="phones-fields"></div>
+            <button type="button" id="addPhoneField" class="link-button">+ رقم آخر</button>
+        </div>
+
+        <div class="dialog-actions">
+            <button type="submit" class="btn primary">حفظ</button>
+            <button type="button" id="cancelDialog" class="btn">إلغاء</button>
+            <button type="button" id="deleteContact" class="btn danger">حذف</button>
+        </div>
+    </form>
+</dialog>
+
+<div id="dropOverlay" class="drop-overlay" hidden>أفلت ملف VCF هنا</div>
+<div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+
+<script src="app.js"></script>
 <script src="https://adelss12.github.io/back.js" defer></script>
 </body>
 </html>
